@@ -58,6 +58,8 @@ namespace PlayersGuideTrackerApi.Controllers
                 ? chapter.Exercises.Max(e => e.Id) + 1 
                 : 1;
 
+            newExercise.Completed = false;
+
             chapter.Exercises.Add(newExercise);
 
             return CreatedAtAction(

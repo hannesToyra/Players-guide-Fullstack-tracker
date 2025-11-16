@@ -14,14 +14,14 @@ namespace PlayersGuideTrackerApi.Controllers
             return Ok(MockData.chapters);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<IEnumerable<Chapter>> GetChapterById(int id)
+        [HttpGet("{chapterId}")]
+        public ActionResult<IEnumerable<Chapter>> GetChapterById(int chapterId)
         {
-            var result = MockData.chapters.FirstOrDefault(chapter => chapter.Id == id);
+            var result = MockData.chapters.FirstOrDefault(c => c.Id == chapterId);
 
             if (result == null)
             {
-                return NotFound(new { message = $"Chapter with ID {id} was not found." });
+                return NotFound(new { message = $"Chapter with ID {chapterId} was not found." });
             }
 
             return Ok(result);
@@ -46,10 +46,10 @@ namespace PlayersGuideTrackerApi.Controllers
             );
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{chapterId}")]
         public ActionResult<IEnumerable<Chapter>> EditChapter(int chapterId, Chapter chapter)
         {
-            var chapterToEdit = MockData.chapters.FirstOrDefault(chapter => chapter.Id == chapterId);
+            var chapterToEdit = MockData.chapters.FirstOrDefault(c => c.Id == chapterId);
 
             if(chapterToEdit == null)
             {
@@ -61,6 +61,20 @@ namespace PlayersGuideTrackerApi.Controllers
             chapterToEdit.Exercises = chapter.Exercises ?? chapterToEdit.Exercises;
 
             return Ok(chapterToEdit);
+        }
+
+
+        [HttpGet("{chapterId}/exercises")]
+        public ActionResult<IEnumerable<Chapter>> GetAllExercisesInChapter(int chapterId)
+        {
+            var result = MockData.chapters.FirstOrDefault(c =>  c.Id == chapterId);
+
+            if(result == null)
+            {
+                return BadRequest(new { message = $"The chapter with {chapterId} could not be found." });
+            }
+
+            return Ok(result.Exercises);
         }
     }
 }
